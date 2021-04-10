@@ -5,8 +5,8 @@
 	<groupId>no.hyp</groupId>
 	<artifactId>farmingupgrade</artifactId>
 	<version>1.2.2</version>
-	<name>Example</name>
-	<description>Example description</description>
+	<name>FarmingUpgrade</name>
+	<description>Upgraded farming mechanics.</description>
 
     <packaging>jar</packaging>
 
@@ -21,6 +21,7 @@
 
 	<build>
 		<finalName>${project.name}-${project.version}</finalName>
+		<sourceDirectory>src/main/java</sourceDirectory>
 
 		<defaultGoal>clean install</defaultGoal>
 
