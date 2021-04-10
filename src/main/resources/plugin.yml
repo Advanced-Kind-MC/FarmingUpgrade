@@ -1,6 +1,6 @@
-name: FarmingUpgrade
+name: ${project.name}
 author: Torm
 description: Upgraded farming mechanics.
-version: 1.2.2
+version: ${project.version}
 main: no.hyp.farmingupgrade.FarmingUpgrade
 api-version: 1.16
