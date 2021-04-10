@@ -46,11 +46,13 @@ final class HarvestListener implements Listener {
         Block crop = e.getBlock();
         // Handle breaking of crops.
         if (!this.plugin.harvestableCrops.containsKey(crop.getType())) {
+            plugin.getLogger().info("block not in crops");
             return;
         }
         ItemStack tool = player.getInventory().getItemInMainHand();
         // If broken by a hoe, all crops within range are harvested and automatically replanted.
-        if (!this.plugin.tools.containsKey(tool.getType())) {
+        if (!this.plugin.tools.containsKey(tool)) {
+            plugin.getLogger().info("tool not in tools");
             return;
         }
         e.setCancelled(true);
@@ -64,9 +66,9 @@ final class HarvestListener implements Listener {
         int range;
         if (this.plugin.configurationHoeRange()) {
             if (this.plugin.configurationHoeEfficiency()) {
-                range = Math.min(7, this.plugin.tools.get(tool.getType()) + tool.getEnchantmentLevel(Enchantment.DIG_SPEED) / 2);
+                range = Math.min(7, this.plugin.tools.get(tool) + tool.getEnchantmentLevel(Enchantment.DIG_SPEED) / 2);
             } else {
-                range = Math.min(7, this.plugin.tools.get(tool.getType()));
+                range = Math.min(7, this.plugin.tools.get(tool));
             }
         } else {
             range = 0;

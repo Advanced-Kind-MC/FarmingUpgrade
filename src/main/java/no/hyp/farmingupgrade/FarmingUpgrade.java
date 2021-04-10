@@ -37,12 +37,14 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
 
     TrampleListener trampleListener;
 
-    Random random;
+    HoeGroundListener hoeGroundListener;
+
+    static final Random random = new Random();
 
     /**
      * A map of hoes and their ranges.
      */
-    Map<Material, Integer> tools;
+    final ToolMap<Integer> tools = new ToolMap<>();
 
     /**
      * Crops that are harvested by being broken and replanted with a seed.
@@ -109,15 +111,6 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        this.random = new Random();
-        // Set hoe properties.
-        this.tools = new HashMap<>();
-        this.tools.put(Material.WOODEN_HOE, 0);
-        this.tools.put(Material.STONE_HOE, 0);
-        this.tools.put(Material.GOLDEN_HOE, 1);
-        this.tools.put(Material.IRON_HOE, 1);
-        this.tools.put(Material.DIAMOND_HOE, 2);
-        this.tools.put(Material.NETHERITE_HOE, 2);
         // Set harvestable crop properties.
         this.harvestableCrops = new HashMap<>();
         this.harvestableCrops.put(Material.WHEAT, Material.WHEAT_SEEDS);
@@ -142,6 +135,7 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
         this.configurationUpgrade();
         // Enable configuration watcher.
         this.watcherEnable();
+
         // Register the event listeners.
         this.getServer().getPluginManager().registerEvents(this, this);
         // Set listeners.
@@ -149,15 +143,31 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
         this.hydrationListener = new HydrationListener(this);
         this.fertiliseListener = new FertiliseListener(this, this.random);
         this.trampleListener = new TrampleListener(this);
+        this.hoeGroundListener = new HoeGroundListener(this);
         this.getServer().getPluginManager().registerEvents(harvestListener, this);
         this.getServer().getPluginManager().registerEvents(hydrationListener, this);
         this.getServer().getPluginManager().registerEvents(fertiliseListener, this);
         this.getServer().getPluginManager().registerEvents(trampleListener, this);
+        this.getServer().getPluginManager().registerEvents(hoeGroundListener, this);
     }
 
     @Override
     public void onDisable() {
         this.watcherDisable();
+    }
+
+    @Override
+    public void reloadConfig() {
+        super.reloadConfig();
+
+        // Set hoe properties.
+        this.tools.clear();
+        for (Map map : getConfig().getMapList("tools")) {
+            ToolData data = ToolData.deserialize(map);
+            int range = (int) map.getOrDefault("aoe", 0);
+            tools.put(data, range);
+            getLogger().info(String.format("%s(%s): %s", data.material, data.customModel, range));
+        }
     }
 
     /**
@@ -198,7 +208,7 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
         }
     }
 
-    public Map<Material, Integer> getTools() {
+    public ToolMap<Integer> getTools() {
         return this.tools;
     }
 
@@ -294,7 +304,7 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
      * Also checks that the Player is in Survival or Adventure mode before applying damage.
      *
      * @param player The player whose tool might take damage.
-     * @param tool The item to take damage.
+     * @param tool   The item to take damage.
      * @param damage The amount of damage to apply.
      */
     public static void damageTool(Random random, Player player, ItemStack tool, int damage) {
@@ -302,7 +312,7 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
             // Calculate the chance of the tool taking damage with the standard Minecraft formula,
             // which depends on the level of the Unbreaking enchantment.
             double damageChance = 1.0 / (tool.getEnchantmentLevel(Enchantment.DURABILITY) + 1.0);
-            if (random.nextFloat() < damageChance) {
+            if (random.nextDouble() < damageChance) {
                 damageTool(player, tool, damage);
             }
         }
@@ -321,7 +331,7 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
      * Apply damage to a tool. Does nothing if the item is not Damageable.
      * If a player is in creative mode, their tools probably should not take damage.
      *
-     * @param tool The item to take damage.
+     * @param tool   The item to take damage.
      * @param damage The amount of damage to apply.
      * @return If the tool reaches zero or less durability.
      */
@@ -355,10 +365,10 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
     /**
      * Determine if a block has water in its vicinity.
      *
-     * @param block The centre block.
-     * @param radius The horizontal radius (of a square circle) to search within.
+     * @param block   The centre block.
+     * @param radius  The horizontal radius (of a square circle) to search within.
      * @param highest The greatest height to search in, relative to the block.
-     * @param lowest The lowest height to search in, relative to the block.
+     * @param lowest  The lowest height to search in, relative to the block.
      * @return If there is water in the searched region.
      */
     public static boolean isHydrated(Collection<Material> materials, Block block, int radius, int highest, int lowest) {
@@ -405,8 +415,8 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
      * In a ring centred on a block with the given radius, locate the blocks whose material is one of the given types.
      *
      * @param materials The materials to search for.
-     * @param centre The centre block.
-     * @param radius The radius of the ring.
+     * @param centre    The centre block.
+     * @param radius    The radius of the ring.
      * @return The blocks in the ring whose material matches one of those searched for.
      */
     public static Set<Block> findAdjacentMaterialsRadius(Collection<Material> materials, Block centre, int radius) {
@@ -447,11 +457,11 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
      * Find the highest block that has a material of one of the given types.
      *
      * @param materials The materials to search for.
-     * @param world The world to search in.
-     * @param x Block x coordinate.
-     * @param z Block z coordinate.
-     * @param highest Highest y coordinate.
-     * @param lowest Lowest y coordinate.
+     * @param world     The world to search in.
+     * @param x         Block x coordinate.
+     * @param z         Block z coordinate.
+     * @param highest   Highest y coordinate.
+     * @param lowest    Lowest y coordinate.
      * @return The highest block of one of the materials in the column, otherwise empty.
      */
     public static Optional<Block> findHighestMaterial(Collection<Material> materials, World world, int x, int z, int highest, int lowest) {

@@ -4,6 +4,13 @@
 # Configuration version. Do not change.
 version: 2
 
+tools:
+  - material: IRON_HOE
+    custom-model: 20213
+  - material: NETHERITE_HOE
+    custom-model: 20214
+    aoe: 2 # radius in blocks
+
 # Upgraded hoe mechanics.
 hoeUpgrade:
   # Enable upgraded hoes.
