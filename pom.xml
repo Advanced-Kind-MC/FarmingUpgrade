@@ -28,12 +28,8 @@
 		<resources>
 			<!-- Static resources -->
 			<resource>
-				<directory>${project.basedir}/main/java/resources</directory>
+				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
-				<includes>
-					<include>**/*.yml</include>
-					<include>**/*.txt</include>
-				</includes>
 			</resource>
 		</resources>
 
