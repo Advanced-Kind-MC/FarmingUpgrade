@@ -1,6 +1,7 @@
 package no.hyp.farmingupgrade;
 
 import co.aikar.commands.PaperCommandManager;
+import com.advancedkind.plugin.utils.YamlFileConfig;
 import com.advancedkind.plugin.utils.collections.ItemDataSet;
 import com.google.common.collect.Lists;
 import no.hyp.farmingupgrade.container.FarmItemDataContainer;
@@ -44,6 +45,8 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
     FarmingUpgradeCommand farmingUpgradeCommand;
 
     PaperCommandManager commandManager;
+
+    YamlFileConfig messages;
 
     static final Random random = new Random();
 
@@ -117,6 +120,8 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        messages = new YamlFileConfig(this, "messages.yml");
+
         // Set harvestable crop properties.
         this.harvestableCrops = new HashMap<>();
         this.harvestableCrops.put(Material.WHEAT, Material.WHEAT_SEEDS);
@@ -171,6 +176,7 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
     public void reloadConfig() {
         saveDefaultConfig();
         super.reloadConfig();
+        messages.reload();
 
         // Set hoe properties.
         this.tools.clear();
@@ -218,6 +224,7 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
      * Use Bernoulli trials to determine how many growth stages to add to a crop.
      */
     public static void trialGrow(Random random, int trials, double probability, BlockState state) {
+        state.getBlock().getLightFromSky()
         BlockData data = state.getBlockData();
         if (data instanceof Ageable) {
             // Run Bernoulli trials to determine growth stage increase.

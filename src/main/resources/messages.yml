@@ -1,0 +1,8 @@
+prefix: "&6[FarmUpgrade]"
+
+commands:
+  give: "%prefix% Giving %player% %item% (%key%)"
+  get: "%prefix% You got an %item% (%key%)"
+  reload:
+    start: "%prefix% Reloading"
+    finish: "%prefix% Reloaded"

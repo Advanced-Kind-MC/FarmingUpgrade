@@ -14,13 +14,18 @@ permissions:
   farmingupgrade.command:
     default: op
     description: allows you to use the /farmingupgrade command
+  farmingupgrade.command.reload:
+    default: op
+    description: allows you to reload farmingupgrade
+    children:
+      farmingupgrade.command: true
   farmingupgrade.command.get:
     default: op
     description: allows you to get the farmingupgrade tools
     children:
       farmingupgrade.command: true
-  farmingupgrade.command.reload:
+  farmingupgrade.command.give:
     default: op
-    description: allows you to reload farmingupgrade
+    description: allows you to give someone an farmingtool
     children:
       farmingupgrade.command: true
