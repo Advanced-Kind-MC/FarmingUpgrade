@@ -224,7 +224,6 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
      * Use Bernoulli trials to determine how many growth stages to add to a crop.
      */
     public static void trialGrow(Random random, int trials, double probability, BlockState state) {
-        state.getBlock().getLightFromSky()
         BlockData data = state.getBlockData();
         if (data instanceof Ageable) {
             // Run Bernoulli trials to determine growth stage increase.
