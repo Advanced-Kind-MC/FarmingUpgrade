@@ -30,7 +30,7 @@ final class HarvestListener implements Listener {
     /**
      * If a player breaks a crop with a hoe, handle this event manually. Find the adjacent crops
      * and call custom UpgradedBlockBreakEvents on the to give other plugins a chance to catch them.
-     *
+     * <p>
      * Since this is a mechanic the event should be caught and cancelled as early as possible (LOWEST priority).
      * Then we can dispatch new events that we can control the outcome of ourselves.
      */
@@ -47,14 +47,14 @@ final class HarvestListener implements Listener {
         Block crop = e.getBlock();
         // Handle breaking of crops.
         if (!this.plugin.harvestableCrops.containsKey(crop.getType())) {
-            plugin.getLogger().info("block not in crops");
+            //plugin.getLogger().info("block not in crops");
             return;
         }
         ItemStack tool = player.getInventory().getItemInMainHand();
         // If broken by a hoe, all crops within range are harvested and automatically replanted.
         FarmItemDataContainer data = this.plugin.tools.get(tool);
         if (data == null) {
-            plugin.getLogger().info("tool not in tools");
+            //plugin.getLogger().info("tool not in tools");
             return;
         }
         e.setCancelled(true);
