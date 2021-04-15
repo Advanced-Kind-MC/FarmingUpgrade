@@ -1,5 +1,6 @@
 package no.hyp.farmingupgrade;
 
+import no.hyp.farmingupgrade.container.FarmItemDataContainer;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
@@ -51,7 +52,8 @@ final class HarvestListener implements Listener {
         }
         ItemStack tool = player.getInventory().getItemInMainHand();
         // If broken by a hoe, all crops within range are harvested and automatically replanted.
-        if (!this.plugin.tools.containsKey(tool)) {
+        FarmItemDataContainer data = this.plugin.tools.get(tool);
+        if (data == null) {
             plugin.getLogger().info("tool not in tools");
             return;
         }
@@ -66,9 +68,9 @@ final class HarvestListener implements Listener {
         int range;
         if (this.plugin.configurationHoeRange()) {
             if (this.plugin.configurationHoeEfficiency()) {
-                range = Math.min(7, this.plugin.tools.get(tool) + tool.getEnchantmentLevel(Enchantment.DIG_SPEED) / 2);
+                range = Math.min(7, data.getRange(player, tool) + tool.getEnchantmentLevel(Enchantment.DIG_SPEED) / 2);
             } else {
-                range = Math.min(7, this.plugin.tools.get(tool));
+                range = Math.min(7, data.getRange(player, tool));
             }
         } else {
             range = 0;

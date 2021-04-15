@@ -4,3 +4,23 @@ description: Upgraded farming mechanics.
 version: ${project.version}
 main: no.hyp.farmingupgrade.FarmingUpgrade
 api-version: 1.16
+
+commands:
+  farmingupgrade:
+    aliases: farmup
+    permission: farmingupgrade.command
+
+permissions:
+  farmingupgrade.command:
+    default: op
+    description: allows you to use the /farmingupgrade command
+  farmingupgrade.command.get:
+    default: op
+    description: allows you to get the farmingupgrade tools
+    children:
+      farmingupgrade.command: true
+  farmingupgrade.command.reload:
+    default: op
+    description: allows you to reload farmingupgrade
+    children:
+      farmingupgrade.command: true

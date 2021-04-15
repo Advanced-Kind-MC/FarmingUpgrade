@@ -5,11 +5,19 @@
 version: 2
 
 tools:
-  - material: IRON_HOE
+  iron-sythe:
+    material: IRON_HOE
     custom-model: 20213
-  - material: NETHERITE_HOE
+  netherite-sythe:
+    material: NETHERITE_HOE
+    name: THIS IS A FUCKING NAME
+    lore:
+      - SOME STUPID LORE
+      - YOU SUCKER I NEED SLEEP
+      - ITS ALMOST 1AM hehe
     custom-model: 20214
     aoe: 2 # radius in blocks
+    delay: 5
 
 # Upgraded hoe mechanics.
 hoeUpgrade:

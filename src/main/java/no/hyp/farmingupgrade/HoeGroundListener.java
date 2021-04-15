@@ -5,6 +5,7 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,10 +21,11 @@ public class HoeGroundListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onHoeGround(PlayerInteractEvent event) {
+        if(!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
         Block block = event.getClickedBlock();
         ItemStack item = event.getItem();
         if (block == null || item == null) return;
-        if (hoeableBlocks.contains(block.getType()) && plugin.tools.containsKey(item))
+        if (hoeableBlocks.contains(block.getType()) && plugin.tools.contains(item))
             event.setCancelled(true);
     }
 }

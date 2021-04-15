@@ -1,6 +1,9 @@
 package no.hyp.farmingupgrade;
 
+import co.aikar.commands.PaperCommandManager;
+import com.advancedkind.plugin.utils.collections.ItemDataSet;
 import com.google.common.collect.Lists;
+import no.hyp.farmingupgrade.container.FarmItemDataContainer;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -8,6 +11,7 @@ import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Farmland;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -27,8 +31,6 @@ import java.util.function.Consumer;
 
 public final class FarmingUpgrade extends JavaPlugin implements Listener {
 
-    Thread watcherThread;
-
     HarvestListener harvestListener;
 
     HydrationListener hydrationListener;
@@ -39,12 +41,16 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
 
     HoeGroundListener hoeGroundListener;
 
+    FarmingUpgradeCommand farmingUpgradeCommand;
+
+    PaperCommandManager commandManager;
+
     static final Random random = new Random();
 
     /**
      * A map of hoes and their ranges.
      */
-    final ToolMap<Integer> tools = new ToolMap<>();
+    final ItemDataSet<FarmItemDataContainer> tools = new ItemDataSet<>();
 
     /**
      * Crops that are harvested by being broken and replanted with a seed.
@@ -129,12 +135,10 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
         this.fertilisableCrops.put(Material.PUMPKIN_STEM, commonFertilise);
         this.fertilisableCrops.put(Material.MELON_STEM, commonFertilise);
         // Load the configuration. Save the default config if it does not exist.
-        this.saveDefaultConfig();
         this.reloadConfig();
         // Upgrade the configuration if necessary.
         this.configurationUpgrade();
         // Enable configuration watcher.
-        this.watcherEnable();
 
         // Register the event listeners.
         this.getServer().getPluginManager().registerEvents(this, this);
@@ -149,24 +153,33 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
         this.getServer().getPluginManager().registerEvents(fertiliseListener, this);
         this.getServer().getPluginManager().registerEvents(trampleListener, this);
         this.getServer().getPluginManager().registerEvents(hoeGroundListener, this);
+
+        commandManager = new PaperCommandManager(this);
+        commandManager.enableUnstableAPI("brigadier");
+        commandManager.getCommandCompletions().registerAsyncCompletion("farmtools", (c) ->
+                getConfig().getConfigurationSection("tools").getKeys(false)
+        );
+        this.farmingUpgradeCommand = new FarmingUpgradeCommand(this);
+        commandManager.registerCommand(farmingUpgradeCommand);
     }
 
     @Override
     public void onDisable() {
-        this.watcherDisable();
     }
 
     @Override
     public void reloadConfig() {
+        saveDefaultConfig();
         super.reloadConfig();
 
         // Set hoe properties.
         this.tools.clear();
-        for (Map map : getConfig().getMapList("tools")) {
-            ToolData data = ToolData.deserialize(map);
-            int range = (int) map.getOrDefault("aoe", 0);
-            tools.put(data, range);
-            getLogger().info(String.format("%s(%s): %s", data.material, data.customModel, range));
+        ConfigurationSection toolsConfig = getConfig().getConfigurationSection("tools");
+        for (String key : toolsConfig.getKeys(false)) {
+            ConfigurationSection toolConfig = toolsConfig.getConfigurationSection(key);
+            FarmItemDataContainer data = new FarmItemDataContainer(toolConfig);
+            data.log(this);
+            tools.add(data);
         }
     }
 
@@ -189,26 +202,7 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
         }
     }
 
-    /**
-     * Start/restart the configuration watcher thread.
-     */
-    public void watcherEnable() {
-        this.watcherDisable();
-        Path pluginDirectory = this.getDataFolder().toPath();
-        this.watcherThread = new Thread(new ConfigurationWatcher(this, pluginDirectory));
-        watcherThread.start();
-    }
-
-    /**
-     * Stop the configuration watcher thread.
-     */
-    public void watcherDisable() {
-        if (this.watcherThread != null) {
-            this.watcherThread.interrupt();
-        }
-    }
-
-    public ToolMap<Integer> getTools() {
+    public ItemDataSet<FarmItemDataContainer> getTools() {
         return this.tools;
     }
 
