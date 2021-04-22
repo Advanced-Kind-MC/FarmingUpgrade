@@ -11,10 +11,12 @@ import org.jetbrains.annotations.NotNull;
 public class FarmItemDataContainer extends ItemDataContainer {
     public final Integer range;
     public final int rangeDelay;
+    public final double paymentMultiplier;
 
     public FarmItemDataContainer(@NotNull ConfigurationSection config) {
         super(config);
         this.range = ConfigUtils.getInteger(config, "aoe");
+        this.paymentMultiplier = config.getDouble("payment-multiplier", 1);
         Double delay = ConfigUtils.getDouble(config, "delay");
         if (delay != null)
             this.rangeDelay = (int) Math.round(delay * 20);
@@ -34,5 +36,10 @@ public class FarmItemDataContainer extends ItemDataContainer {
         super.log(plugin);
         plugin.getLogger().info("aoe range: " + range);
         plugin.getLogger().info("aoe delay: " + rangeDelay);
+        plugin.getLogger().info("payment multiplier: " + paymentMultiplier);
+    }
+
+    public double getPaymentMultiplier() {
+        return paymentMultiplier;
     }
 }

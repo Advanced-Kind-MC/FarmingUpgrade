@@ -3,6 +3,7 @@ package no.hyp.farmingupgrade;
 import co.aikar.commands.PaperCommandManager;
 import com.advancedkind.plugin.utils.YamlFileConfig;
 import com.advancedkind.plugin.utils.collections.ItemDataSet;
+import com.gamingmesh.jobs.Jobs;
 import com.google.common.collect.Lists;
 import no.hyp.farmingupgrade.container.FarmItemDataContainer;
 import org.bukkit.*;
@@ -31,6 +32,10 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public final class FarmingUpgrade extends JavaPlugin implements Listener {
+
+    public static final String ADJACENT_HARVESTED_CROP = "AdjacentHarvestedCrop";
+
+    JobsListener jobsListener = null;
 
     HarvestListener harvestListener;
 
@@ -153,11 +158,21 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
         this.fertiliseListener = new FertiliseListener(this, this.random);
         this.trampleListener = new TrampleListener(this);
         this.hoeGroundListener = new HoeGroundListener(this);
+
+        if(getServer().getPluginManager().isPluginEnabled("Jobs")) {
+            getLogger().info("Registering Jobs Support");
+            this.jobsListener = new JobsListener(this);
+            this.getServer().getPluginManager().registerEvents(jobsListener, this);
+        } else {
+            getLogger().info("Jobs Support not enabled");
+        }
+
         this.getServer().getPluginManager().registerEvents(harvestListener, this);
         this.getServer().getPluginManager().registerEvents(hydrationListener, this);
         this.getServer().getPluginManager().registerEvents(fertiliseListener, this);
         this.getServer().getPluginManager().registerEvents(trampleListener, this);
         this.getServer().getPluginManager().registerEvents(hoeGroundListener, this);
+
 
         commandManager = new PaperCommandManager(this);
         commandManager.enableUnstableAPI("brigadier");

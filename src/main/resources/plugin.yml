@@ -5,6 +5,9 @@ version: ${project.version}
 main: no.hyp.farmingupgrade.FarmingUpgrade
 api-version: 1.16
 
+softdepend:
+  - Jobs
+
 commands:
   farmingupgrade:
     aliases: farmup

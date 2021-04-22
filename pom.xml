@@ -1,130 +1,140 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>no.hyp</groupId>
-	<artifactId>farmingupgrade</artifactId>
-	<version>1.2.2.2</version>
-	<name>FarmingUpgrade</name>
-	<description>Upgraded farming mechanics.</description>
+    <groupId>no.hyp</groupId>
+    <artifactId>farmingupgrade</artifactId>
+    <version>1.2.2.3</version>
+    <name>FarmingUpgrade</name>
+    <description>Upgraded farming mechanics.</description>
 
     <packaging>jar</packaging>
 
-	<properties>
-		<project.mainClass>${project.name}</project.mainClass>
-		<project.shortName>${project.name}</project.shortName>
+    <properties>
+        <project.mainClass>${project.name}</project.mainClass>
+        <project.shortName>${project.name}</project.shortName>
 
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>11</java.version>
-	</properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>11</java.version>
+    </properties>
 
-	<build>
-		<finalName>${project.name}-ADK-${project.version}</finalName>
-		<sourceDirectory>src/main/java</sourceDirectory>
+    <build>
+        <finalName>${project.name}-ADK-${project.version}</finalName>
+        <sourceDirectory>src/main/java</sourceDirectory>
 
-		<defaultGoal>clean install</defaultGoal>
+        <defaultGoal>clean install</defaultGoal>
 
-		<resources>
-			<!-- Static resources -->
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
+        <resources>
+            <!-- Static resources -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
 
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
-				<configuration>
-					<source>11</source>
-					<target>11</target>
-					<compilerArgs>
-						<arg>-parameters</arg>
-					</compilerArgs>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.2.4</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<filters>
-								<filter>
-									<artifact>*:*</artifact>
-									<excludes>
-										<exclude>META-INF/**</exclude>
-									</excludes>
-								</filter>
-							</filters>
-							<relocations>
-								<relocation>
-									<pattern>co.aikar.commands</pattern>
-									<shadedPattern>${project.groupId}.${project.artifactId}.acf</shadedPattern>
-								</relocation>
-								<relocation>
-									<pattern>co.aikar.locales</pattern>
-									<shadedPattern>${project.groupId}.${project.artifactId}.locales</shadedPattern>
-								</relocation>
-								<relocation>
-									<pattern>com.advancedkind.plugin.utils</pattern>
-									<shadedPattern>${project.groupId}.${project.artifactId}.utils</shadedPattern>
-								</relocation>
-							</relocations>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/**</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <relocations>
+                                <relocation>
+                                    <pattern>co.aikar.commands</pattern>
+                                    <shadedPattern>${project.groupId}.${project.artifactId}.lib.acf</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>co.aikar.locales</pattern>
+                                    <shadedPattern>${project.groupId}.${project.artifactId}.lib.locales</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.advancedkind.plugin.utils</pattern>
+                                    <shadedPattern>${project.groupId}.${project.artifactId}.utils</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
-	<repositories>
-		<repository>
-			<id>papermc</id> <!-- paper-api -->
-			<url>https://papermc.io/repo/repository/maven-public/</url>
-		</repository>
-		<repository>
-			<id>github</id>
-			<url>https://maven.pkg.github.com/Advanced-Kind-MC/ADKUtils</url>
-		</repository>
-		<repository>
-			<id>aikar</id>
-			<url>https://repo.aikar.co/content/groups/aikar/</url>
-		</repository>
-	</repositories>
+    <repositories>
+        <repository>
+            <id>papermc</id> <!-- paper-api -->
+            <url>https://papermc.io/repo/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>github</id> <!-- ADKUtils -->
+            <url>https://maven.pkg.github.com/Advanced-Kind-MC/ADKUtils</url>
+        </repository>
+        <repository>
+            <id>aikar</id> <!-- ACF -->
+            <url>https://repo.aikar.co/content/groups/aikar/</url>
+        </repository>
+        <repository> <!-- Jobs -->
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.jetbrains</groupId>
-			<artifactId>annotations</artifactId>
-			<version>20.1.0</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.destroystokyo.paper</groupId>
-			<artifactId>paper-api</artifactId>
-			<version>1.16.5-R0.1-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.advanced-kind.plugin</groupId>
-			<artifactId>utils</artifactId>
-			<version>[1,2)</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>co.aikar</groupId>
-			<artifactId>acf-paper</artifactId>
-			<version>0.5.0-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>20.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.destroystokyo.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.16.5-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.advanced-kind.plugin</groupId>
+            <artifactId>utils</artifactId>
+            <version>[1,2)</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>co.aikar</groupId>
+            <artifactId>acf-paper</artifactId>
+            <version>0.5.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.Zrips</groupId>
+            <artifactId>Jobs</artifactId>
+            <version>4.17.1</version> <!-- Change the LATEST to the current version of jobs -->
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>

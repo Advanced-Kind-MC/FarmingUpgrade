@@ -11,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
 import java.util.Random;
@@ -83,7 +84,10 @@ final class HarvestListener implements Listener {
         boolean collect = this.plugin.configurationHoeCollect();
         boolean harvest = this.plugin.configurationHoeHarvest();
         for (Block adjacentCrop : adjacentCrops) {
+            if(!adjacentCrop.getLocation().equals(crop.getLocation()))
+                adjacentCrop.setMetadata(FarmingUpgrade.ADJACENT_HARVESTED_CROP, new FixedMetadataValue(plugin, data.getPaymentMultiplier()));
             FarmingUpgrade.harvestCrop(this.random, player, adjacentCrop, tool, replant, unbreaking, collect, harvest, this.plugin.harvestableCrops.get(adjacentCrop.getType()));
+            adjacentCrop.removeMetadata(FarmingUpgrade.ADJACENT_HARVESTED_CROP, plugin);
         }
     }
 
