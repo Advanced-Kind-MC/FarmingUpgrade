@@ -3,9 +3,9 @@ package no.hyp.farmingupgrade;
 import co.aikar.commands.PaperCommandManager;
 import com.advancedkind.plugin.utils.YamlFileConfig;
 import com.advancedkind.plugin.utils.collections.ItemDataSet;
-import com.gamingmesh.jobs.Jobs;
 import com.google.common.collect.Lists;
 import no.hyp.farmingupgrade.container.FarmItemDataContainer;
+import no.hyp.farmingupgrade.listener.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -67,59 +67,59 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
 
     Map<Material, Consumer<BlockState>> fertilisableCrops;
 
-    boolean configurationHydrationUpgrade() {
+    public boolean configurationHydrationUpgrade() {
         return this.getConfig().getBoolean("hydrationUpgrade.enabled", false);
     }
 
-    int configurationHydrationRange() {
+    public int configurationHydrationRange() {
         return this.getConfig().getInt("hydrationUpgrade.range", 4);
     }
 
-    int configurationHydrationDepth() {
+    public int configurationHydrationDepth() {
         return this.getConfig().getInt("hydrationUpgrade.depth", 2);
     }
 
-    int configurationHydrationHeight() {
+    public int configurationHydrationHeight() {
         return this.getConfig().getInt("hydrationUpgrade.height", 0);
     }
 
-    boolean configurationHydrationDry() {
+    public boolean configurationHydrationDry() {
         return this.getConfig().getBoolean("hydrationUpgrade.dry", false);
     }
 
-    boolean configurationHoeUpgrade() {
+    public boolean configurationHoeUpgrade() {
         return this.getConfig().getBoolean("hoeUpgrade.enabled", true);
     }
 
-    boolean configurationHoeRange() {
+    public boolean configurationHoeRange() {
         return this.getConfig().getBoolean("hoeUpgrade.range", true);
     }
 
-    boolean configurationHoeEfficiency() {
+    public boolean configurationHoeEfficiency() {
         return this.getConfig().getBoolean("hoeUpgrade.efficiency", true);
     }
 
-    boolean configurationHoeUnbreaking() {
+    public boolean configurationHoeUnbreaking() {
         return this.getConfig().getBoolean("hoeUpgrade.unbreaking", true);
     }
 
-    boolean configurationHoeHarvest() {
+    public boolean configurationHoeHarvest() {
         return this.getConfig().getBoolean("hoeUpgrade.harvest", true);
     }
 
-    boolean configurationHoeReplant() {
+    public boolean configurationHoeReplant() {
         return this.getConfig().getBoolean("hoeUpgrade.replant", true);
     }
 
-    boolean configurationHoeCollect() {
+    public boolean configurationHoeCollect() {
         return this.getConfig().getBoolean("hoeUpgrade.collect", false);
     }
 
-    boolean configurationFertiliserUpgrade() {
+    public boolean configurationFertiliserUpgrade() {
         return this.getConfig().getBoolean("fertiliserUpgrade.enabled", true);
     }
 
-    boolean configurationTrampleUpgrade() {
+    public boolean configurationTrampleUpgrade() {
         return this.getConfig().getBoolean("trampleUpgrade.enabled", true);
     }
 
@@ -159,7 +159,7 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
         this.trampleListener = new TrampleListener(this);
         this.hoeGroundListener = new HoeGroundListener(this);
 
-        if(getServer().getPluginManager().isPluginEnabled("Jobs")) {
+        if (getServer().getPluginManager().isPluginEnabled("Jobs")) {
             getLogger().info("Registering Jobs Support");
             this.jobsListener = new JobsListener(this);
             this.getServer().getPluginManager().registerEvents(jobsListener, this);
