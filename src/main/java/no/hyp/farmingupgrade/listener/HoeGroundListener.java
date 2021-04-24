@@ -1,5 +1,6 @@
-package no.hyp.farmingupgrade;
+package no.hyp.farmingupgrade.listener;
 
+import no.hyp.farmingupgrade.FarmingUpgrade;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -25,7 +26,7 @@ public class HoeGroundListener implements Listener {
         Block block = event.getClickedBlock();
         ItemStack item = event.getItem();
         if (block == null || item == null) return;
-        if (hoeableBlocks.contains(block.getType()) && plugin.tools.contains(item))
+        if (hoeableBlocks.contains(block.getType()) && plugin.getTools().contains(item))
             event.setCancelled(true);
     }
 }

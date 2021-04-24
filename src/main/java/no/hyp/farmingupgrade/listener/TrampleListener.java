@@ -1,5 +1,8 @@
-package no.hyp.farmingupgrade;
+package no.hyp.farmingupgrade.listener;
 
+import no.hyp.farmingupgrade.FarmingUpgrade;
+import no.hyp.farmingupgrade.UpgradedBlockFadeEvent;
+import no.hyp.farmingupgrade.UpgradedPlayerInteractEvent;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -12,7 +15,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 
-final class TrampleListener implements Listener {
+public final class TrampleListener implements Listener {
 
     private final FarmingUpgrade plugin;
 
@@ -47,7 +50,7 @@ final class TrampleListener implements Listener {
             e.setUseInteractedBlock(Event.Result.DENY);
             // Trample the crop above the farmland.
             Block crop = farmland.getRelative(0, 1, 0);
-            if (this.plugin.harvestableCrops.containsKey(crop.getType())) {
+            if (this.plugin.getHarvestableCrops().containsKey(crop.getType())) {
                 // Send an InteractEvent for the trampled crop.
                 UpgradedPlayerInteractEvent trampleEvent = new UpgradedPlayerInteractEvent(e.getPlayer(), e.getAction(), e.getItem(), crop, e.getBlockFace());
                 this.plugin.getServer().getPluginManager().callEvent(trampleEvent);

@@ -1,5 +1,7 @@
-package no.hyp.farmingupgrade;
+package no.hyp.farmingupgrade.listener;
 
+import no.hyp.farmingupgrade.FarmingUpgrade;
+import no.hyp.farmingupgrade.UpgradedBlockBreakEvent;
 import no.hyp.farmingupgrade.container.FarmItemDataContainer;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -17,7 +19,7 @@ import org.bukkit.util.Vector;
 import java.util.Random;
 import java.util.Set;
 
-final class HarvestListener implements Listener {
+public final class HarvestListener implements Listener {
 
     private final FarmingUpgrade plugin;
 
@@ -47,13 +49,13 @@ final class HarvestListener implements Listener {
         Player player = e.getPlayer();
         Block crop = e.getBlock();
         // Handle breaking of crops.
-        if (!this.plugin.harvestableCrops.containsKey(crop.getType())) {
+        if (!this.plugin.getHarvestableCrops().containsKey(crop.getType())) {
             //plugin.getLogger().info("block not in crops");
             return;
         }
         ItemStack tool = player.getInventory().getItemInMainHand();
         // If broken by a hoe, all crops within range are harvested and automatically replanted.
-        FarmItemDataContainer data = this.plugin.tools.get(tool);
+        FarmItemDataContainer data = this.plugin.getTools().get(tool);
         if (data == null) {
             //plugin.getLogger().info("tool not in tools");
             return;
@@ -77,7 +79,7 @@ final class HarvestListener implements Listener {
             range = 0;
         }
         // Get the adjacent crops in range.
-        Set<Block> adjacentCrops = FarmingUpgrade.findAdjacentMaterials(this.plugin.harvestableCrops.keySet(), crop, range);
+        Set<Block> adjacentCrops = FarmingUpgrade.findAdjacentMaterials(this.plugin.getHarvestableCrops().keySet(), crop, range);
         // For every crop block, simulate a BlockBreakEvent for other plugins to react to.
         boolean replant = this.plugin.configurationHoeReplant();
         boolean unbreaking = this.plugin.configurationHoeUnbreaking();
@@ -86,7 +88,7 @@ final class HarvestListener implements Listener {
         for (Block adjacentCrop : adjacentCrops) {
             if(!adjacentCrop.getLocation().equals(crop.getLocation()))
                 adjacentCrop.setMetadata(FarmingUpgrade.ADJACENT_HARVESTED_CROP, new FixedMetadataValue(plugin, data.getPaymentMultiplier()));
-            FarmingUpgrade.harvestCrop(this.random, player, adjacentCrop, tool, replant, unbreaking, collect, harvest, this.plugin.harvestableCrops.get(adjacentCrop.getType()));
+            FarmingUpgrade.harvestCrop(this.random, player, adjacentCrop, tool, replant, unbreaking, collect, harvest, this.plugin.getHarvestableCrops().get(adjacentCrop.getType()));
             adjacentCrop.removeMetadata(FarmingUpgrade.ADJACENT_HARVESTED_CROP, plugin);
         }
     }

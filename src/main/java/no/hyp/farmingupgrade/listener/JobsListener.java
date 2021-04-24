@@ -1,7 +1,8 @@
-package no.hyp.farmingupgrade;
+package no.hyp.farmingupgrade.listener;
 
 import com.gamingmesh.jobs.api.JobsPrePaymentEvent;
 import com.gamingmesh.jobs.container.ActionType;
+import no.hyp.farmingupgrade.FarmingUpgrade;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.metadata.MetadataValue;

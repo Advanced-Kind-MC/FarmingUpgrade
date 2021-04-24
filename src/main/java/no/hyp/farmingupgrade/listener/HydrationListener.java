@@ -1,5 +1,9 @@
-package no.hyp.farmingupgrade;
+package no.hyp.farmingupgrade.listener;
 
+import no.hyp.farmingupgrade.FarmingUpgrade;
+import no.hyp.farmingupgrade.UpgradedBlockFadeEvent;
+import no.hyp.farmingupgrade.UpgradedMoistureChangeEvent;
+import no.hyp.farmingupgrade.UpgradedPlayerInteractEvent;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -12,7 +16,7 @@ import org.bukkit.event.block.MoistureChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 
-final class HydrationListener implements Listener {
+public final class HydrationListener implements Listener {
 
     private final FarmingUpgrade plugin;
 
