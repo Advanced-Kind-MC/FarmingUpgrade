@@ -1,4 +1,4 @@
-package no.hyp.farmingupgrade;
+package no.hyp.farmingupgrade.event;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;

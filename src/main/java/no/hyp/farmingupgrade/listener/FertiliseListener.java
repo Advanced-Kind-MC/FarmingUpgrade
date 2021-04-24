@@ -2,7 +2,7 @@ package no.hyp.farmingupgrade.listener;
 
 import com.google.common.collect.Lists;
 import no.hyp.farmingupgrade.FarmingUpgrade;
-import no.hyp.farmingupgrade.UpgradedBlockFertilizeEvent;
+import no.hyp.farmingupgrade.event.UpgradedBlockFertilizeEvent;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

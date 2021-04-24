@@ -1,9 +1,9 @@
 package no.hyp.farmingupgrade.listener;
 
 import no.hyp.farmingupgrade.FarmingUpgrade;
-import no.hyp.farmingupgrade.UpgradedBlockFadeEvent;
-import no.hyp.farmingupgrade.UpgradedMoistureChangeEvent;
-import no.hyp.farmingupgrade.UpgradedPlayerInteractEvent;
+import no.hyp.farmingupgrade.event.UpgradedBlockFadeEvent;
+import no.hyp.farmingupgrade.event.UpgradedMoistureChangeEvent;
+import no.hyp.farmingupgrade.event.UpgradedPlayerInteractEvent;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;

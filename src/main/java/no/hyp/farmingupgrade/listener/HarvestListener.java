@@ -1,7 +1,7 @@
 package no.hyp.farmingupgrade.listener;
 
 import no.hyp.farmingupgrade.FarmingUpgrade;
-import no.hyp.farmingupgrade.UpgradedBlockBreakEvent;
+import no.hyp.farmingupgrade.event.UpgradedBlockBreakEvent;
 import no.hyp.farmingupgrade.container.FarmItemDataContainer;
 import org.bukkit.Location;
 import org.bukkit.Particle;
