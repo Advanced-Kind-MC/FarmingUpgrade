@@ -114,7 +114,8 @@ public class ToolDamageListener implements Listener {
         List<Component> lore = meta.lore();
         if(lore == null)
             lore = new ArrayList<>(1);
-        lore.removeIf(comp -> comp instanceof TextComponent && ((TextComponent) comp).content().startsWith("Durability: "));
+        else
+            lore.removeIf(comp -> comp instanceof TextComponent && ((TextComponent) comp).content().startsWith("Durability: "));
         if (fakeDurabillity < maxFakeDurabillity)
             lore.add(Component.text(String.format("Durability: %s / %s", fakeDurabillity, maxFakeDurabillity)).color(NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false));
         meta.lore(lore);
