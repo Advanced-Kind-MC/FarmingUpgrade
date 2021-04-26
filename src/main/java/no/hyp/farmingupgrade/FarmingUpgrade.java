@@ -22,6 +22,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.block.*;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -49,6 +50,8 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
     TrampleListener trampleListener;
 
     HoeGroundListener hoeGroundListener;
+
+    ToolDamageListener toolDamageListener;
 
     FarmingUpgradeCommand farmingUpgradeCommand;
 
@@ -161,6 +164,7 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
         this.fertiliseListener = new FertiliseListener(this, this.random);
         this.trampleListener = new TrampleListener(this);
         this.hoeGroundListener = new HoeGroundListener(this);
+        this.toolDamageListener = new ToolDamageListener(this);
 
         if (getServer().getPluginManager().isPluginEnabled("Jobs")) {
             getLogger().info("Registering Jobs Support");
@@ -175,6 +179,7 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
         this.getServer().getPluginManager().registerEvents(fertiliseListener, this);
         this.getServer().getPluginManager().registerEvents(trampleListener, this);
         this.getServer().getPluginManager().registerEvents(hoeGroundListener, this);
+        this.getServer().getPluginManager().registerEvents(toolDamageListener, this);
 
 
         commandManager = new PaperCommandManager(this);
@@ -337,12 +342,23 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
     }
 
     public static void damageTool(Player player, ItemStack tool, int damage) {
-        boolean destroyed = damageTool(tool, damage);
-        if (destroyed) {
-            player.spawnParticle(Particle.ITEM_CRACK, player.getLocation(), 1, tool);
-            player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
-            tool.setAmount(tool.getAmount() - 1);
-        }
+        if (!(tool.getItemMeta() instanceof Damageable)) return;
+
+        PlayerItemDamageEvent event = new PlayerItemDamageEvent(player, tool, damage);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) return;
+        damage = event.getDamage();
+
+        ItemMeta meta = tool.getItemMeta();
+        Damageable damageable = (Damageable) meta;
+        damageable.setDamage(damageable.getDamage() + damage);
+        tool.setItemMeta(meta);
+        final boolean destroyed = damageable.getDamage() >= tool.getType().getMaxDurability();
+        if(!destroyed) return;
+
+        player.spawnParticle(Particle.ITEM_CRACK, player.getLocation(), 1, tool);
+        player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+        tool.setAmount(tool.getAmount() - 1);
     }
 
     /**
@@ -353,16 +369,16 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
      * @param damage The amount of damage to apply.
      * @return If the tool reaches zero or less durability.
      */
-    public static boolean damageTool(ItemStack tool, int damage) {
-        ItemMeta meta = tool.getItemMeta();
-        if (meta instanceof Damageable) {
-            Damageable damageable = (Damageable) meta;
-            damageable.setDamage(damageable.getDamage() + damage);
-            tool.setItemMeta(meta);
-            return damageable.getDamage() >= tool.getType().getMaxDurability();
-        }
-        return false;
-    }
+//    public static boolean damageTool(ItemStack tool, int damage) {
+//        ItemMeta meta = tool.getItemMeta();
+//        if (meta instanceof Damageable) {
+//            Damageable damageable = (Damageable) meta;
+//            damageable.setDamage(damageable.getDamage() + damage);
+//            tool.setItemMeta(meta);
+//            return damageable.getDamage() >= tool.getType().getMaxDurability();
+//        }
+//        return false;
+//    }
 
     /**
      * Check if a block is fully grown.

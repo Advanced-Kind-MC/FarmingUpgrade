@@ -12,10 +12,12 @@ public class FarmItemDataContainer extends ItemDataContainer {
     public final Integer range;
     public final int rangeDelay;
     public final double paymentMultiplier;
+    public final Integer durability;
 
     public FarmItemDataContainer(@NotNull ConfigurationSection config) {
         super(config);
         this.range = ConfigUtils.getInteger(config, "aoe");
+        this.durability = ConfigUtils.getInteger(config, "durability");
         this.paymentMultiplier = config.getDouble("payment-multiplier", 1);
         Double delay = ConfigUtils.getDouble(config, "delay");
         if (delay != null)
@@ -34,8 +36,12 @@ public class FarmItemDataContainer extends ItemDataContainer {
     @Override
     public void log(JavaPlugin plugin) {
         super.log(plugin);
-        plugin.getLogger().info("aoe range: " + range);
-        plugin.getLogger().info("aoe delay: " + rangeDelay);
+        if(range != null) {
+            plugin.getLogger().info("aoe range: " + range);
+            plugin.getLogger().info("aoe delay: " + rangeDelay);
+        }
+        if(durability != null)
+            plugin.getLogger().info("durability: " + durability);
         plugin.getLogger().info("payment multiplier: " + paymentMultiplier);
     }
 

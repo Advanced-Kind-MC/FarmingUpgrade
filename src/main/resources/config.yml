@@ -8,6 +8,7 @@ tools:
   iron-sythe:
     material: IRON_HOE
     custom-model: 20213
+    durability: 800
   netherite-sythe:
     material: NETHERITE_HOE
     name: THIS IS A FUCKING NAME
@@ -19,6 +20,11 @@ tools:
     aoe: 2 # radius in blocks
     delay: 5
     payment-multiplier: 0.5
+
+crop-payment-modifier:
+  daylight-min-strength: 8
+  daylight: 1
+  darkness: 1
 
 # Upgraded hoe mechanics.
 hoeUpgrade:
