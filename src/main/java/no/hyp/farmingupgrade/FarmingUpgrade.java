@@ -37,7 +37,8 @@ import java.util.function.Consumer;
 
 public final class FarmingUpgrade extends JavaPlugin implements Listener {
 
-    public static final String ADJACENT_HARVESTED_CROP = "AdjacentHarvestedCrop";
+    public static final String CROP_HARVEST_PAYMENT_MULTIPLIER = "CropHarvestPaymentMultiplier";
+    public static final String CROP_HARVEST_EXPERIENCE_MULTIPLIER = "CropHarvestExperienceMultiplier";
 
     JobsListener jobsListener = null;
 

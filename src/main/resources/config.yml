@@ -21,10 +21,12 @@ tools:
     delay: 5
     payment-multiplier: 0.5
 
-crop-payment-modifier:
+crop-modifier:
   daylight-min-strength: 8
-  daylight: 1
-  darkness: 1
+  payment-daylight: 1
+  payment-darkness: 1
+  experience-daylight: 1
+  experience-darkness: 1
 
 # Upgraded hoe mechanics.
 hoeUpgrade:

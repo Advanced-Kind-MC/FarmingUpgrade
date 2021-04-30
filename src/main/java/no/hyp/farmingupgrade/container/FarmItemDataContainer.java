@@ -12,6 +12,7 @@ public class FarmItemDataContainer extends ItemDataContainer {
     public final Integer range;
     public final int rangeDelay;
     public final double paymentMultiplier;
+    public final double experienceMultiplier;
     public final Integer durability;
 
     public FarmItemDataContainer(@NotNull ConfigurationSection config) {
@@ -19,6 +20,7 @@ public class FarmItemDataContainer extends ItemDataContainer {
         this.range = ConfigUtils.getInteger(config, "aoe");
         this.durability = ConfigUtils.getInteger(config, "durability");
         this.paymentMultiplier = config.getDouble("payment-multiplier", 1);
+        this.experienceMultiplier = config.getDouble("experience-multiplier", 1);
         Double delay = ConfigUtils.getDouble(config, "delay");
         if (delay != null)
             this.rangeDelay = (int) Math.round(delay * 20);
@@ -43,9 +45,5 @@ public class FarmItemDataContainer extends ItemDataContainer {
         if(durability != null)
             plugin.getLogger().info("durability: " + durability);
         plugin.getLogger().info("payment multiplier: " + paymentMultiplier);
-    }
-
-    public double getPaymentMultiplier() {
-        return paymentMultiplier;
     }
 }

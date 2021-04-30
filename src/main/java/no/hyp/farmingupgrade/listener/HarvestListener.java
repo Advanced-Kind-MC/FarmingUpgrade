@@ -86,10 +86,14 @@ public final class HarvestListener implements Listener {
         boolean collect = this.plugin.configurationHoeCollect();
         boolean harvest = this.plugin.configurationHoeHarvest();
         for (Block adjacentCrop : adjacentCrops) {
-            if(!adjacentCrop.getLocation().equals(crop.getLocation()))
-                adjacentCrop.setMetadata(FarmingUpgrade.ADJACENT_HARVESTED_CROP, new FixedMetadataValue(plugin, data.getPaymentMultiplier()));
+            if(!adjacentCrop.getLocation().equals(crop.getLocation())) {
+                adjacentCrop.setMetadata(FarmingUpgrade.CROP_HARVEST_PAYMENT_MULTIPLIER, new FixedMetadataValue(plugin, data.paymentMultiplier));
+                adjacentCrop.setMetadata(FarmingUpgrade.CROP_HARVEST_EXPERIENCE_MULTIPLIER, new FixedMetadataValue(plugin, data.paymentMultiplier));
+            }
             FarmingUpgrade.harvestCrop(this.random, player, adjacentCrop, tool, replant, unbreaking, collect, harvest, this.plugin.getHarvestableCrops().get(adjacentCrop.getType()));
-            adjacentCrop.removeMetadata(FarmingUpgrade.ADJACENT_HARVESTED_CROP, plugin);
+
+            adjacentCrop.removeMetadata(FarmingUpgrade.CROP_HARVEST_PAYMENT_MULTIPLIER, plugin);
+            adjacentCrop.removeMetadata(FarmingUpgrade.CROP_HARVEST_EXPERIENCE_MULTIPLIER, plugin);
         }
     }
 
