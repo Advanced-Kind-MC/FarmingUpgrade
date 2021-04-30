@@ -38,15 +38,10 @@ public class ToolDamageListener implements Listener {
         final ItemStack output = event.getResult();
         if (input == null || !(input.getItemMeta() instanceof Damageable) || output == null || !output.getType().isItem())
             return;
-        plugin.getLogger().info("Anvil items are valid");
         FarmItemDataContainer data = plugin.getTools().get(input);
         if (data == null || data.durability == null) return;
-        plugin.getLogger().info("Data found");
         double durabilityScale = getDurabilityScale(data, getMaxDurability(input));
-        plugin.getLogger().info("DurabilityScale: " + durabilityScale);
-        plugin.getLogger().info("DurabilityScale: " + durabilityScale);
         int fakeDurability = getFakeDurabilityFromRealDurability(output, durabilityScale);
-        plugin.getLogger().info("New Durability: " + fakeDurability);
         setFakeDurabillity(output, fakeDurability, data.durability);
     }
 
@@ -77,7 +72,7 @@ public class ToolDamageListener implements Listener {
         setFakeDurabillity(item, fakeDurability, data.durability);
         if (fakeDurability <= 0) {
             setFakeDurabillity(item, 0, data.durability);
-            return realDurability;
+            return -realDurability;
         } else if (fakeDurability >= data.durability) {
             setFakeDurabillity(item, data.durability, data.durability);
             return maxDurability - realDurability;
