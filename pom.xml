@@ -4,7 +4,7 @@
 
     <groupId>no.hyp</groupId>
     <artifactId>farmingupgrade</artifactId>
-    <version>1.2.2.8</version>
+    <version>1.2.2.10</version>
     <name>FarmingUpgrade</name>
     <description>Upgraded farming mechanics.</description>
 
@@ -135,6 +135,13 @@
             <artifactId>Jobs</artifactId>
             <version>4.17.1</version> <!-- Change the LATEST to the current version of jobs -->
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.gmail.nossr50.mcMMO</groupId>
+            <artifactId>mcMMO</artifactId>
+            <version>2.1.196</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/dependencies/mcMMO.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

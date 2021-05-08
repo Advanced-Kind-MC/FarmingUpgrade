@@ -5,12 +5,14 @@ import com.advancedkind.plugin.utils.YamlFileConfig;
 import com.advancedkind.plugin.utils.collections.ItemDataSet;
 import com.google.common.collect.Lists;
 import no.hyp.farmingupgrade.container.FarmItemDataContainer;
+import no.hyp.farmingupgrade.event.CropReplantEvent;
 import no.hyp.farmingupgrade.event.UpgradedBlockBreakEvent;
 import no.hyp.farmingupgrade.event.UpgradedBlockFadeEvent;
 import no.hyp.farmingupgrade.event.UpgradedMoistureChangeEvent;
 import no.hyp.farmingupgrade.listener.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
@@ -23,6 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.block.*;
 import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -41,6 +44,7 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
     public static final String CROP_HARVEST_EXPERIENCE_MULTIPLIER = "CropHarvestExperienceMultiplier";
 
     JobsListener jobsListener = null;
+    McMMORepairListener mcMMORepairListener = null;
 
     HarvestListener harvestListener;
 
@@ -174,6 +178,14 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
         } else {
             getLogger().info("Jobs Support not enabled");
         }
+        if (getServer().getPluginManager().isPluginEnabled("mcMMO")) {
+            getLogger().info("Registering mcMMO Support");
+            this.mcMMORepairListener = new McMMORepairListener(this);
+            this.getServer().getPluginManager().registerEvents(mcMMORepairListener, this);
+        } else {
+            getLogger().info("mcMMO Support not enabled");
+        }
+
 
         this.getServer().getPluginManager().registerEvents(harvestListener, this);
         this.getServer().getPluginManager().registerEvents(hydrationListener, this);
@@ -593,7 +605,10 @@ public final class FarmingUpgrade extends JavaPlugin implements Listener {
             }
             // Replant the crop if the conditions are satisfied.
             if (seedFound) {
-                crop.setType(state.getType());
+                CropReplantEvent event = new CropReplantEvent(crop, state, crop.getRelative(BlockFace.DOWN), new ItemStack(seed,1), player, true, EquipmentSlot.HAND);
+                Bukkit.getServer().getPluginManager().callEvent(event);
+                if(!event.isCancelled())
+                    crop.setType(state.getType());
             }
         }
     }
