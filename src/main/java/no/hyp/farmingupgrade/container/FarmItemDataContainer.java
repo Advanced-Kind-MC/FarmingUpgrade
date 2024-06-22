@@ -1,7 +1,7 @@
 package no.hyp.farmingupgrade.container;
 
-import com.advancedkind.plugin.utils.ConfigUtils;
 import com.advancedkind.plugin.utils.container.ItemDataContainer;
+import com.advancedkind.plugin.utils.utils.ConfigUtils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

@@ -23,9 +23,9 @@ public class FarmingUpgradeCommand extends BaseCommand {
     @Subcommand("reload")
     @CommandPermission("farmingupgrade.command.reload")
     public void onReload(CommandSender sender) {
-        sender.sendMessage(plugin.messages.getChatMessage("commands.reload.start"));
+        sender.sendMessage(plugin.messages.getComponent("commands.reload.start"));
         plugin.reloadConfig();
-        sender.sendMessage(plugin.messages.getChatMessage("commands.reload.finish"));
+        sender.sendMessage(plugin.messages.getComponent("commands.reload.finish"));
     }
 
     @Subcommand("get")
@@ -36,7 +36,7 @@ public class FarmingUpgradeCommand extends BaseCommand {
         ItemStack item = itemData.createItemStack();
         player.getInventory().addItem(item);
 
-        Component component = plugin.messages.getChatMessage("commands.get");
+        Component component = plugin.messages.getComponent("commands.get");
         Component itemName =
                 item.getItemMeta().hasDisplayName() ?
                         item.getItemMeta().displayName() :
@@ -58,7 +58,7 @@ public class FarmingUpgradeCommand extends BaseCommand {
         ItemStack item = itemData.createItemStack();
         receiver.getInventory().addItem(item);
 
-        Component component = plugin.messages.getChatMessage("commands.give");
+        Component component = plugin.messages.getComponent("commands.give");
         Component playerName = receiver.displayName().hoverEvent(receiver.asHoverEvent());
         component = component.replaceText(TextReplacementConfig.builder().match("%player%").replacement(playerName).build());
         Component itemName =
